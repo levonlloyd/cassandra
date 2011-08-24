@@ -1,0 +1,7 @@
+# Build artifacts
+src/gen-java/*
+build/*
+
+# VIM temp files
+*.*.swo
+*.*.swp
