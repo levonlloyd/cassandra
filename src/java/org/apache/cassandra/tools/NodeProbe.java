@@ -136,6 +136,10 @@ public class NodeProbe
         ssProxy.forceTableCleanup(tableName);
     }
 
+    public void submitMinorCompaction() throws IOException {
+        ssProxy.submitMinorCompaction();
+    }
+
     public void forceTableCompaction() throws IOException
     {
         ssProxy.forceTableCompaction();
@@ -144,6 +148,11 @@ public class NodeProbe
     public void forceTableCompaction(String tableName) throws IOException
     {
         ssProxy.forceTableCompaction(tableName);
+    }
+
+    public void forceTableCompaction(String tableName, String cfName) throws IOException
+    {
+        ssProxy.forceTableCompaction(tableName, cfName);
     }
 
     public void forceTableFlush(String tableName, String... columnFamilies) throws IOException

@@ -316,6 +316,32 @@ public class Table
         }
     }
 
+    /*
+     * This method is an ADMIN operation to force compaction
+     * of all SSTables in a particular column family
+     */
+    public void forceCompaction(String cfName) {
+        ColumnFamilyStore cfStore = columnFamilyStores.get( cfName );
+        if ( cfStore != null )
+        {
+            CompactionManager.instance.submitMajor(cfStore);
+        }
+    }
+
+    /*
+     * This method will submit a minor compaction
+     * on all sstables in this keyspace
+     */
+    public void submitMinorCompaction() {
+        Set<String> columnFamilies = tableMetadata.getColumnFamilies();
+        for ( String columnFamily : columnFamilies )
+        {
+            ColumnFamilyStore cfStore = columnFamilyStores.get( columnFamily );
+            if ( cfStore != null )
+                CompactionManager.instance.submitMinorIfNeeded(cfStore);
+        }
+    }
+
     List<SSTableReader> getAllSSTablesOnDisk()
     {
         List<SSTableReader> list = new ArrayList<SSTableReader>();

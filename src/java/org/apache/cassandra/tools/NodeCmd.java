@@ -80,7 +80,7 @@ public class NodeCmd {
                 "tpstats, flush, drain, repair, decommission, move, loadbalance, removetoken, " +
                 "setcachecapacity <keyspace> <cfname> <keycachecapacity> <rowcachecapacity>, " +
                 "getcompactionthreshold, setcompactionthreshold [minthreshold] ([maxthreshold])" +
-                "streams [host]");
+                "streams [host] minorcompaction");
         String usage = String.format("java %s --host <arg> <command>%n", NodeCmd.class.getName());
         hf.printHelp(usage, "", options, header);
     }
@@ -438,12 +438,28 @@ public class NodeCmd {
             else
                 probe.forceTableCleanup();
         }
+        else if (cmdName.equals("minorcompaction"))
+        {
+            probe.submitMinorCompaction();
+        }
         else if (cmdName.equals("compact"))
         {
-            if (arguments.length > 1)
+            if (arguments.length == 3) 
+            {
+                probe.forceTableCompaction(arguments[1], arguments[2]);
+            }
+            else if (arguments.length == 2) 
+            {
                 probe.forceTableCompaction(arguments[1]);
-            else
+            } else if (arguments.length == 1) 
+            {
                 probe.forceTableCompaction();
+            } else 
+            {
+                System.err.println("Must provide at least keyspace name");
+                printUsage();
+                System.exit(1);
+            }
         }
         else if (cmdName.equals("cfstats"))
         {

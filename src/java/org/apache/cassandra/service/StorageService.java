@@ -318,14 +318,14 @@ public class StorageService implements IEndPointStateChangeSubscriber, StorageSe
 
         DatabaseDescriptor.createAllDirectories();
 
-        try
+        /*try
         {
             GCInspector.instance.start();
         }
         catch (Throwable t)
         {
             logger_.warn("Unable to start GCInspector (currently only supported on the Sun JVM)");
-        }
+        } */
 
         logger_.info("Starting up server gossip");
 
@@ -1022,6 +1022,15 @@ public class StorageService implements IEndPointStateChangeSubscriber, StorageSe
         Table table = getValidTable(tableName);
         table.forceCleanup();
     }
+
+
+    public void submitMinorCompaction() throws IOException 
+    {
+        for (Table table: Table.all()) 
+        {
+            table.submitMinorCompaction();
+        }
+    }
     
     public void forceTableCompaction() throws IOException
     {
@@ -1033,6 +1042,12 @@ public class StorageService implements IEndPointStateChangeSubscriber, StorageSe
     {
         Table table = getValidTable(tableName);
         table.forceCompaction();
+    }
+
+    public void forceTableCompaction(String tableName, String cfName) throws IOException
+    {
+        Table table = getValidTable(tableName);
+        table.forceCompaction(cfName);
     }
 
     /**

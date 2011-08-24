@@ -90,6 +90,11 @@ public interface StorageServiceMBean
     public List<InetAddress> getNaturalEndpoints(String key, String table);
 
     /**
+     * Submits a minor compaction
+     */
+    public void submitMinorCompaction() throws IOException;
+
+    /**
      * Forces major compaction (all sstable files compacted)
      */
     public void forceTableCompaction() throws IOException;
@@ -98,6 +103,11 @@ public interface StorageServiceMBean
      * Forces major compaction of a single keyspace
      */
     public void forceTableCompaction(String tableName) throws IOException;
+
+    /**
+     * Forces major compaction of single column family
+     */
+    public void forceTableCompaction(String tableName, String cfName) throws IOException;
 
     /**
      * Trigger a cleanup of keys on all tables.
